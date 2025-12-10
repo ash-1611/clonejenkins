@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Flask Docker Image..."
-                    bat "docker build -t myflaskapp:latest ."
+                    sh "docker build -t myflaskapp:latest ."
                 }
             }
         }
@@ -22,8 +22,8 @@ pipeline {
             steps {
                 script {
                     echo "Stopping old container if exists..."
-                    bat "docker stop flaskdemo || exit 0"
-                    bat "docker rm flaskdemo || exit 0"
+                    sh "docker stop flaskdemo || exit 0"
+                    sh "docker rm flaskdemo || exit 0"
                 }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     echo "Running new container on port 5000..."
-                    bat "docker run -d --name flaskdemo -p 5000:5000 myflaskapp:latest"
+                    sh "docker run -d --name flaskdemo -p 5000:5000 myflaskapp:latest"
                 }
             }
         }
@@ -44,7 +44,7 @@ pipeline {
                     sleep(5)
 
                     echo "Testing application on port 5000..."
-                    bat "curl http://localhost:5000"
+                    sh "curl http://localhost:5000"
                 }
             }
         }
