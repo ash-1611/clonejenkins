@@ -5,7 +5,8 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'master', url: 'https://github.com/shaanman23/my-flask-app.git'
+                git branch: 'master',
+                    url: 'https://github.com/shaanman23/my-flask-app.git'
             }
         }
 
@@ -22,8 +23,8 @@ pipeline {
             steps {
                 script {
                     echo "Stopping old container if exists..."
-                    sh "docker stop flaskdemo || exit 0"
-                    sh "docker rm flaskdemo || exit 0"
+                    sh "docker stop flaskdemo || true"
+                    sh "docker rm flaskdemo || true"
                 }
             }
         }
@@ -31,8 +32,8 @@ pipeline {
         stage('Run New Container') {
             steps {
                 script {
-                    echo "Running new container on port 5000..."
-                    sh "docker run -d --name flaskdemo -p 5000:5000 myflaskapp:latest"
+                    echo "Running new container on port 5002..."
+                    sh "docker run -d --name flaskdemo -p 5002:5000 myflaskapp:latest"
                 }
             }
         }
@@ -41,20 +42,18 @@ pipeline {
             steps {
                 script {
                     echo "Waiting for app to start..."
-                    sleep(5)
+                    sleep 5
 
-                    echo "Testing application on port 5000..."
-                    sh "curl http://localhost:5000"
+                    echo "Testing application on port 5002..."
+                    sh "curl http://localhost:5002"
                 }
             }
         }
 
         stage('Deploy Success') {
             steps {
-                echo "Flask App is running successfully at: http://localhost:5000"
+                echo "Flask App is running successfully at: http://localhost:5002"
             }
         }
     }
 }
-
-
